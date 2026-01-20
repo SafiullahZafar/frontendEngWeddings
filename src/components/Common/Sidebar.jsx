@@ -32,12 +32,16 @@ const Sidebar = ({ sidebarOpen }) => {
                 w-[270px]
                 text-black dark:text-white
                 flex flex-col font-sans
-                fixed md:sticky top-0     {/* ✅ FIX HERE */}
+                fixed md:sticky top-0
                 self-start
                 z-50
                 transition-transform duration-300
                 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
                 md:translate-x-0
+
+                /* ✅ ADD THESE TWO LINES FOR MOBILE SCROLL */
+                max-h-screen
+                overflow-y-auto
             `}
         >
             {/* LOGO */}
