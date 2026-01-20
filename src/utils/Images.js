@@ -45,3 +45,15 @@ export const groups = {
   group5: [g5i1, g5i2, g5i3],
   group6: [g6i1, g6i2, g6i3],
 };
+
+// src/utils/Images.js
+
+import Homecard1 from "../assets/images/Homecard1.jpg";
+import Homecard2 from "../assets/images/Homecard2.jpg";
+import Homecard3 from "../assets/images/Homecard3.jpg";
+
+export {
+  Homecard1,
+  Homecard2,
+  Homecard3,
+};
