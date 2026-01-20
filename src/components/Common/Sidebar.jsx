@@ -42,7 +42,7 @@ const Sidebar = ({ sidebarOpen }) => {
             `}
         >
             {/* LOGO */}
-            <div className="pt-9 pb-[50px] flex justify-center">
+            <div className="pt-9 pb-[40px] flex justify-center">
                 <img
                     src={sidebarLogo}
                     alt="Sidebar Logo"
@@ -67,7 +67,7 @@ const Sidebar = ({ sidebarOpen }) => {
                             key={i}
                             to={item.path}
                             className={({ isActive }) =>
-                                `relative flex items-center gap-5 px-6 py-2 rounded-2xl transition-all duration-300 ${
+                                `relative flex items-center gap-4 px-6 py-2 rounded-2xl transition-all duration-300 ${
                                     isActive
                                         ? "bg-black text-white dark:bg-white dark:text-black shadow-xl"
                                         : "text-black dark:text-white hover:bg-black/10 dark:hover:bg-white/10"
@@ -97,7 +97,7 @@ const Sidebar = ({ sidebarOpen }) => {
                                     </span>
 
                                     {isActive && (
-                                        <div className="absolute right-3 top-1/2 -translate-y-1/2 w-[5px] h-7 bg-black dark:bg-white rounded-full" />
+                                        <div className="absolute right-3 top-1/2 -translate-y-1/2 w-[5px] h-6 bg-black dark:bg-white rounded-full" />
                                     )}
                                 </>
                             )}
