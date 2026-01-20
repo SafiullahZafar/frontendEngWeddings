@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes animate-from-top {
+  0% { opacity: 0; transform: translateY(-120px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes animate-from-bottom {
+  0% { opacity: 0; transform: translateY(120px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes animate-from-corner {
+  0% { opacity: 0; transform: translate(-120px, 120px); }
+  100% { opacity: 1; transform: translate(0, 0); }
+}
+
+.animate-from-top { animation: animate-from-top 1.2s ease forwards; }
+.animate-from-bottom { animation: animate-from-bottom 1.2s ease forwards; }
+.animate-from-corner { animation: animate-from-corner 1.2s ease forwards; }
+
+
+
+/* -----------------------------
+   CUSTOM HORIZONTAL SCROLLBAR
+------------------------------ */
+.preview-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar Track */
+.preview-scroll::-webkit-scrollbar {
+  height: 10px;
+}
+
+.preview-scroll::-webkit-scrollbar-track {
+  background: #e5e7eb;
+  border-radius: 999px;
+}
+
+/* Scrollbar Thumb */
+.preview-scroll::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 999px;
+}
+
+.preview-scroll::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
+}
+/* End of scrollbar */
