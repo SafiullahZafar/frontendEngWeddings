@@ -1,4 +1,3 @@
-import { cardImages } from "../../utils/Images";
 import { useNavigate } from "react-router-dom";
 
 const HomesCard = () => {
@@ -10,7 +9,6 @@ const HomesCard = () => {
       title: "Hello in Gallery",
       desc: "To see more images, click the button below",
       btnText: "Go !!!!!",
-      img: cardImages.Homecard1,
       icon: "🚀",
     },
     {
@@ -18,7 +16,6 @@ const HomesCard = () => {
       title: "Edit images Here",
       desc: "Make images more beautiful and stunning",
       btnText: "Want to Edit",
-      img: cardImages.Homecard2,
       icon: "📚",
     },
     {
@@ -26,12 +23,10 @@ const HomesCard = () => {
       title: "Upload your Images",
       desc: "You can upload your own images to the gallery",
       btnText: "Upload Now ",
-      img: cardImages.Homecard3,
       icon: "🧪",
     },
   ];
 
-  // ✅ navigation logic (UNCHANGED)
   const handleNavigate = (id) => {
     if (id === 1) navigate("/gallery");
     if (id === 2) navigate("/edit");
@@ -49,7 +44,7 @@ const HomesCard = () => {
           <div
             className="
               relative
-              bg-[#F5F7FF] dark:bg-[#1A2235]
+              bg-gradient-to-br from-white to-gray-100 dark:from-[#0B1020] dark:to-[#141A2A]
               rounded-[2rem]
               p-6 md:p-8
               flex flex-col lg:flex-row
@@ -60,6 +55,8 @@ const HomesCard = () => {
               w-full max-w-[90%] lg:max-w-[700px]
               lg:min-h-[410px]
               transition-all duration-300
+              hover:scale-[1.01]
+              hover:shadow-2xl
             "
           >
             {/* Icon */}
@@ -67,13 +64,14 @@ const HomesCard = () => {
               className="
                 lg:absolute lg:top-6 lg:left-6
                 mb-4 lg:mb-0
-                p-3 rounded-xl
+                p-4 rounded-xl
                 text-xl
                 shadow-md
                 z-10
                 text-black dark:text-white
-                bg-black/5 dark:bg-white/10
-                transition-colors
+                bg-gradient-to-r from-[#5865F2] to-[#43E7D0]
+                transition-all
+                animate-pulse
               "
             >
               {card.icon}
@@ -85,40 +83,44 @@ const HomesCard = () => {
                 {card.title}
               </h2>
 
-              <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm md:text-base font-normal max-w-[250px] mx-auto lg:mx-0 transition-colors">
+              <p className="text-gray-600 dark:text-gray-300 mb-6 text-sm md:text-base font-normal max-w-[350px] mx-auto lg:mx-0 transition-colors">
                 {card.desc}
               </p>
 
               <button
                 onClick={() => handleNavigate(card.id)}
                 className="
-                  bg-[#5865F2]
-                  hover:bg-[#4752C4]
+                  bg-gradient-to-r from-[#5865F2] to-[#43E7D0]
+                  hover:from-[#4752C4] hover:to-[#1CC7B7]
                   text-white
                   font-semibold
-                  py-2 px-8
+                  py-3 px-10
                   rounded-full
                   w-fit
                   self-center lg:self-start
                   transition-all
                   text-sm
-                  shadow-md
+                  shadow-lg
+                  hover:shadow-2xl
                 "
               >
                 {card.btnText}
               </button>
             </div>
 
-            {/* Right Image */}
+            {/* RIGHT SIDE (NO IMAGE) */}
             <div className="w-full lg:w-[48%] flex items-center justify-center">
-              <div className="rounded-2xl overflow-hidden shadow-lg w-full aspect-video lg:h-[200px]">
-                <img
-                  src={card.img}
-                  alt={card.title}
-                  className="w-full h-full object-cover"
-                />
+              <div className="rounded-2xl w-full aspect-video lg:h-[200px] flex items-center justify-center">
+                <div className="w-[80%] h-[80%] rounded-2xl bg-white dark:bg-[#0A1020] border border-black/5 dark:border-white/10 shadow-lg flex items-center justify-center">
+                  <div className="text-gray-400 dark:text-gray-500 font-bold text-sm">
+                    <span className="block text-3xl">✨</span>
+                    <span className="block mt-2">No Image</span>
+                    <span className="block text-xs mt-1">Stylish Card</span>
+                  </div>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       ))}
