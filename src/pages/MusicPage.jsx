@@ -8,15 +8,13 @@ import MusicCard from "../components/Music/MusicCard";
 const MusicPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const { theme, setTheme } = useTheme(); // ✅ USING CONTEXT
+  const { theme, setTheme } = useTheme();
 
-  // ✅ Load saved theme from localStorage
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) setTheme(savedTheme);
   }, []);
 
-  // ✅ Apply theme to HTML and save it
   useEffect(() => {
     const root = document.documentElement;
     theme === "dark"
@@ -30,7 +28,7 @@ const MusicPage = () => {
     setTheme((p) => (p === "light" ? "dark" : "light"));
 
   return (
-    <div className="flex min-h-screen bg-[#FFEFFF] dark:bg-[#011227] transition-colors duration-300">
+    <div className="flex bg-[#FFEFFF] dark:bg-[#011227] transition-colors duration-300">
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} />
 
@@ -50,7 +48,8 @@ const MusicPage = () => {
           theme={theme}
         />
 
-        <main className="flex-1 p-6">
+        {/* 🔥 FIXED: add overflow + mobile momentum scroll */}
+        <main className="flex-1 p-6 overflow-y-auto -webkit-overflow-scrolling-touch">
           <MusicCard />
         </main>
       </div>
