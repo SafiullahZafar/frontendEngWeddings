@@ -71,4 +71,34 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-/* end of global css file */
+
+
+/* ---------- Sidebar Smooth Scroll for Mobile ---------- */
+.sidebar-scroll {
+  max-height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling */
+}
+
+/* hide default scrollbar */
+.sidebar-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* music  */
+.music-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* native-like smooth scrolling on mobile */
+.flex-1 {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
