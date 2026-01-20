@@ -6,6 +6,8 @@ import {
   Play,
   ArrowLeft,
 } from "lucide-react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const GalleryGroupView = ({ groupName, images = [], close }) => {
   const [currentIndex, setCurrentIndex] = useState(null);
@@ -20,6 +22,9 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
 
   // ✅ KEEPING: Loading state
   const [isLoading, setIsLoading] = useState(true);
+
+  // ✅ NEW: local copy of images to update after delete
+  const [localImages, setLocalImages] = useState(images);
 
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
@@ -53,16 +58,16 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
   const prev = () => {
     if (currentIndex === null) return;
     setIsLoading(true); // Reset loading for next item
-    setCurrentIndex((prevIdx) => 
-      prevIdx === 0 ? images.length - 1 : prevIdx - 1
+    setCurrentIndex((prevIdx) =>
+      prevIdx === 0 ? localImages.length - 1 : prevIdx - 1
     );
   };
 
   const next = () => {
     if (currentIndex === null) return;
     setIsLoading(true); // Reset loading for next item
-    setCurrentIndex((prevIdx) => 
-      prevIdx === images.length - 1 ? 0 : prevIdx + 1
+    setCurrentIndex((prevIdx) =>
+      prevIdx === localImages.length - 1 ? 0 : prevIdx + 1
     );
   };
 
@@ -100,8 +105,8 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
   /* ===============================
       INTRO ANIMATION
   =============================== */
-  const introMax = Math.min(12, images.length);
-  const introList = images.slice(0, introMax);
+  const introMax = Math.min(12, localImages.length);
+  const introList = localImages.slice(0, introMax);
 
   useEffect(() => {
     if (!showIntro || introList.length === 0) return;
@@ -152,8 +157,37 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
   /* ===============================
       SPLIT IMAGES AND VIDEOS FOR GRID
   =============================== */
-  const imageItems = images.filter((i) => !i.split("?")[0].toLowerCase().endsWith(".mp4"));
-  const videoItems = images.filter((i) => i.split("?")[0].toLowerCase().endsWith(".mp4"));
+  const imageItems = localImages.filter(
+    (i) => !i.split("?")[0].toLowerCase().endsWith(".mp4")
+  );
+  const videoItems = localImages.filter((i) =>
+    i.split("?")[0].toLowerCase().endsWith(".mp4")
+  );
+
+  // ✅ NEW: DELETE FUNCTION (Works for images + videos)
+  const handleDelete = async () => {
+    try {
+      const urlToDelete = localImages[currentIndex];
+
+      // API call to backend delete endpoint
+      await axios.delete(
+        `https://backendengwedding.onrender.com/api/gallery/delete`,
+        {
+          data: { url: urlToDelete, group: groupName },
+        }
+      );
+
+      // Update local state (remove deleted item)
+      const updated = [...localImages];
+      updated.splice(currentIndex, 1);
+      setLocalImages(updated);
+
+      setCurrentIndex(null);
+      toast.success("Deleted successfully");
+    } catch (err) {
+      toast.error("Delete failed");
+    }
+  };
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 min-h-screen">
@@ -172,7 +206,7 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
             {groupName}
           </h2>
           <p className="text-blue-600 dark:text-blue-400 font-bold text-sm tracking-widest mt-1">
-            EXPLORING {images.length} ASSETS
+            EXPLORING {localImages.length} ASSETS
           </p>
         </div>
 
@@ -195,7 +229,7 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
                 key={idx}
                 onClick={() => {
                   setIsLoading(true);
-                  setCurrentIndex(images.indexOf(item));
+                  setCurrentIndex(localImages.indexOf(item));
                 }}
                 className={`relative aspect-square rounded-[1.5rem] overflow-hidden cursor-pointer shadow-lg
                             bg-white dark:bg-[#1A2235]
@@ -223,7 +257,7 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
                 key={idx}
                 onClick={() => {
                   setIsLoading(true);
-                  setCurrentIndex(images.indexOf(item));
+                  setCurrentIndex(localImages.indexOf(item));
                 }}
                 className={`relative aspect-square rounded-[1.5rem] overflow-hidden cursor-pointer shadow-lg
                             bg-white dark:bg-[#1A2235]
@@ -279,16 +313,29 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
             <ChevronRight size={48} />
           </button>
 
+          {/* ✅ DELETE BUTTON */}
+          <button
+            className="absolute top-6 right-20 z-50 px-4 py-2 rounded-full bg-red-600 text-white font-bold"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+
           <div className="w-full h-full flex items-center justify-center px-4">
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-10">
-                <div className="text-white font-bold animate-pulse">Loading...</div>
+                <div className="text-white font-bold animate-pulse">
+                  Loading...
+                </div>
               </div>
             )}
 
-            {images[currentIndex]?.split("?")[0].toLowerCase().endsWith(".mp4") ? (
+            {localImages[currentIndex]
+              ?.split("?")[0]
+              .toLowerCase()
+              .endsWith(".mp4") ? (
               <video
-                key={images[currentIndex]} // Key forces re-render on index change
+                key={localImages[currentIndex]} // Key forces re-render on index change
                 ref={modalVideoRef}
                 autoPlay
                 controls
@@ -300,12 +347,12 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
                 onPause={() => setIsVideoPaused(true)}
                 onLoadedData={() => setIsLoading(false)}
               >
-                <source src={images[currentIndex]} type="video/mp4" />
+                <source src={localImages[currentIndex]} type="video/mp4" />
               </video>
             ) : (
               <img
-                key={images[currentIndex]}
-                src={images[currentIndex]}
+                key={localImages[currentIndex]}
+                src={localImages[currentIndex]}
                 className="w-full h-full object-contain"
                 alt=""
                 onLoad={() => setIsLoading(false)}
@@ -315,7 +362,7 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
           </div>
 
           <div className="absolute bottom-6 text-white/40 text-sm font-mono">
-            {currentIndex + 1} / {images.length}
+            {currentIndex + 1} / {localImages.length}
           </div>
         </div>
       )}
