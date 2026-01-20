@@ -55,3 +55,20 @@
   background: #2563eb;
 }
 /* End of scrollbar */
+
+/* global css file */
+.sidebar-scroll {
+  max-height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+/* end of global css file */

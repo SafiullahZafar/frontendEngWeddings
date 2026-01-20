@@ -38,10 +38,7 @@ const Sidebar = ({ sidebarOpen }) => {
                 transition-transform duration-300
                 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
                 md:translate-x-0
-
-                /* ✅ ADD THESE TWO LINES FOR MOBILE SCROLL */
-                max-h-screen
-                overflow-y-auto
+                sidebar-scroll
             `}
         >
             {/* LOGO */}
