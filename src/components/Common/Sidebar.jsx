@@ -42,7 +42,7 @@ const Sidebar = ({ sidebarOpen }) => {
             `}
         >
             {/* LOGO */}
-            <div className="pt-10 pb-[50px] flex justify-center">
+            <div className="pt-9 pb-[50px] flex justify-center">
                 <img
                     src={sidebarLogo}
                     alt="Sidebar Logo"
@@ -57,7 +57,7 @@ const Sidebar = ({ sidebarOpen }) => {
 
             {/* MENU */}
             <div className="flex-1 px-5">
-                <p className="px-5 text-[13px] text-black/50 dark:text-white/50 font-bold mb-6 uppercase tracking-[3px]">
+                <p className="px-5 text-[13px] text-black/50 dark:text-white/50 font-bold mb-5 uppercase tracking-[3px]">
                     General
                 </p>
 
@@ -67,7 +67,7 @@ const Sidebar = ({ sidebarOpen }) => {
                             key={i}
                             to={item.path}
                             className={({ isActive }) =>
-                                `relative flex items-center gap-5 px-6 py-3 rounded-2xl transition-all duration-300 ${
+                                `relative flex items-center gap-5 px-6 py-2 rounded-2xl transition-all duration-300 ${
                                     isActive
                                         ? "bg-black text-white dark:bg-white dark:text-black shadow-xl"
                                         : "text-black dark:text-white hover:bg-black/10 dark:hover:bg-white/10"
@@ -83,7 +83,7 @@ const Sidebar = ({ sidebarOpen }) => {
                                                 : "text-black dark:text-white"
                                         }`}
                                     >
-                                        <item.icon className="w-6 h-6" />
+                                        <item.icon className="w-6 h-5" />
                                     </div>
 
                                     <span
@@ -97,7 +97,7 @@ const Sidebar = ({ sidebarOpen }) => {
                                     </span>
 
                                     {isActive && (
-                                        <div className="absolute right-3 top-1/2 -translate-y-1/2 w-[5px] h-8 bg-black dark:bg-white rounded-full" />
+                                        <div className="absolute right-3 top-1/2 -translate-y-1/2 w-[5px] h-7 bg-black dark:bg-white rounded-full" />
                                     )}
                                 </>
                             )}
@@ -124,7 +124,7 @@ const Sidebar = ({ sidebarOpen }) => {
                      hover:scale-[1.04]
                      active:scale-95
                      active:brightness-75
-                     bg-black/10 dark:bg-white/10 h-32 flex items-center justify-center"
+                     bg-black/10 dark:bg-white/10 h-28 flex items-center justify-center"
                 >
                     <span className="text-black dark:text-white font-bold">
                         PROMO
