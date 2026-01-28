@@ -4,9 +4,11 @@ import App from "./App";
 import { Toaster } from "react-hot-toast";
 import "./index.css";
 import { ThemeProvider } from "./context/ThemeContext";
+import { NotificationProvider } from "./context/NotificationContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <NotificationProvider>
     <ThemeProvider>
     <App />
     <Toaster
@@ -21,5 +23,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       }}
     />
     </ThemeProvider>
+    </NotificationProvider>
   </React.StrictMode>
 );

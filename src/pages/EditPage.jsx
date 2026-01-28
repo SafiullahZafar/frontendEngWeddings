@@ -3,11 +3,16 @@ import { useTheme } from "../context/ThemeContext";
 
 import Navbar from "../components/Common/Navbar";
 import Sidebar from "../components/Common/Sidebar";
-import EditDashboard from "../components/Edit/EditDashboard"; // under construction
+import EditDashboard from "../components/Edit/EditDashboard";
+import EditorCard from "../components/Edit/EditorCard";
+import { useEdit } from "../context/EditContext"; // <-- IMPORTANT
 
 const EditPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+
+  // ⚡️ USE CONTEXT INSTEAD OF LOCAL STATE
+  const { selectedImage } = useEdit();
 
   /* LOAD THEME */
   useEffect(() => {
@@ -30,7 +35,6 @@ const EditPage = () => {
 
   return (
     <div className="flex min-h-screen bg-[#FFEFFF] dark:bg-[#011227] transition-colors duration-300">
-
       {/* SIDEBAR */}
       <Sidebar sidebarOpen={sidebarOpen} />
 
@@ -51,7 +55,11 @@ const EditPage = () => {
         />
 
         <main className="flex-1 p-6">
-          <EditDashboard />
+          {/* ⚡️ SHOW DASHBOARD ONLY WHEN NO IMAGE SELECTED */}
+          {!selectedImage && <EditDashboard />}
+
+          {/* ⚡️ SHOW EDITOR ONLY WHEN IMAGE SELECTED */}
+          {selectedImage && <EditorCard />}
         </main>
       </div>
     </div>

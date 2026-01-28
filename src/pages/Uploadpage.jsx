@@ -4,6 +4,7 @@ import { useTheme } from "../context/ThemeContext";
 import Navbar from "../components/Common/Navbar";
 import Sidebar from "../components/Common/Sidebar";
 import UploadDashboard from "../components/Upload/UploadDashboard";
+import TopBar from "../components/Common/TopBar";
 
 const UploadPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -44,7 +45,7 @@ const UploadPage = () => {
 
       {/* MAIN */}
       <div className="flex-1 flex flex-col">
-        <Navbar
+        <TopBar
           toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           toggleTheme={toggleTheme}
           theme={theme}

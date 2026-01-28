@@ -10,11 +10,13 @@ import EditPage from "./pages/EditPage";
 import NotificationPage from "./pages/NotificationPage";
 import InstructionPage from "./pages/InstructionPage";
 import ContactPage from "./pages/ContactPage";
+import { EditProvider } from "./context/EditContext";
 
 function App() {
   return (
     <Router>
       <MusicProvider>
+        <EditProvider>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
@@ -28,6 +30,7 @@ function App() {
         <Route path="/instructions" element={<InstructionPage />} />
         <Route path="/contact" element={<ContactPage />} />
       </Routes>
+      </EditProvider>
       </MusicProvider>
     </Router>
   );

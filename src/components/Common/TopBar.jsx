@@ -4,10 +4,14 @@ import { useNavigate } from "react-router-dom";
 import logoLight from "../../assets/logo1.svg";
 import logoDark from "../../assets/logo2.svg";
 import { useTheme } from "../../context/ThemeContext";
+import { useNotifications } from "../../context/NotificationContext";
 
 const TopBar = ({ toggleSidebar, sidebarOpen }) => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { notifications } = useNotifications();
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <div className="w-full sticky top-0 z-30">
@@ -28,9 +32,15 @@ const TopBar = ({ toggleSidebar, sidebarOpen }) => {
           <div className="hidden md:flex items-center gap-4">
             <button
               onClick={() => navigate("/notification")}
-              className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 transition"
+              className="relative p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 transition"
             >
               <HiBell className="w-6 h-6 text-black dark:text-white" />
+
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
             </button>
 
             <button
@@ -79,9 +89,15 @@ const TopBar = ({ toggleSidebar, sidebarOpen }) => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate("/notification")}
-              className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 transition"
+              className="relative p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 transition"
             >
               <HiBell className="w-6 h-6 text-black dark:text-white" />
+
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
             </button>
 
             <button

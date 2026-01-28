@@ -8,11 +8,17 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useEdit } from "../../context/EditContext";
+import { useNotifications } from "../../context/NotificationContext";
 
 const GalleryGroupView = ({ groupName, images = [], close }) => {
   const [currentIndex, setCurrentIndex] = useState(null);
   const [introIndex, setIntroIndex] = useState(0);
   const [showIntro, setShowIntro] = useState(true);
+  const { setSelectedImage } = useEdit();
+  const navigate = useNavigate();
+  const { addNotification } = useNotifications();
 
   // ✅ KEEPING: Separate ref for modal video only
   const modalVideoRef = useRef(null);
@@ -165,29 +171,43 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
   );
 
   // ✅ NEW: DELETE FUNCTION (Works for images + videos)
-  const handleDelete = async () => {
-    try {
-      const urlToDelete = localImages[currentIndex];
+ const handleDelete = async () => {
+  try {
+    const urlToDelete = localImages[currentIndex];
 
-      // API call to backend delete endpoint
-      await axios.delete(
-        `https://backendengwedding.onrender.com/api/gallery/delete`,
-        {
-          data: { url: urlToDelete, group: groupName },
-        }
-      );
+    // API call to backend delete endpoint
+    await axios.delete(
+      `https://backendengwedding.onrender.com/api/gallery/delete`,
+      {
+        data: { url: urlToDelete, group: groupName },
+      }
+    );
 
-      // Update local state (remove deleted item)
-      const updated = [...localImages];
-      updated.splice(currentIndex, 1);
-      setLocalImages(updated);
+    // Update local state (remove deleted item)
+    const updated = [...localImages];
+    updated.splice(currentIndex, 1);
+    setLocalImages(updated);
 
-      setCurrentIndex(null);
-      toast.success("Deleted successfully");
-    } catch (err) {
-      toast.error("Delete failed");
-    }
-  };
+    setCurrentIndex(null);
+    toast.success("Deleted successfully");
+
+    // ✅ NEW: Add notification
+    addNotification("success", "Deleted successfully");
+  } catch (err) {
+    toast.error(
+      <span>
+        Delete failed ❌{" "}
+        <a href="/instructions#errors" className="underline font-bold">
+          See solution
+        </a>
+      </span>
+    );
+
+    // ✅ NEW: Add notification
+    addNotification("error", "Delete failed ❌");
+  }
+};
+
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 min-h-screen">
@@ -281,44 +301,73 @@ const GalleryGroupView = ({ groupName, images = [], close }) => {
       {/* MODAL */}
       {currentIndex !== null && (
         <div
-          className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
+          className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center"
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
         >
-          <button
-            className="md:hidden z-50 absolute top-6 left-4 text-white font-bold bg-black/40 px-4 py-2 rounded-full"
-            onClick={() => setCurrentIndex(null)}
-          >
-            Back
-          </button>
+          {/* ✅ FIXED TOP ACTION BAR - PREVENTS OVERLAPPING */}
+          <div className="absolute top-0 left-0 right-0 z-[110] flex items-center justify-between p-4 md:p-6 bg-gradient-to-b from-black/80 to-transparent">
+            {/* LEFT SIDE: BACK BUTTON */}
+            <button
+              className="text-white font-bold bg-black/40 px-4 py-2 rounded-full hover:bg-white/20 transition flex items-center gap-2"
+              onClick={() => setCurrentIndex(null)}
+            >
+              <ArrowLeft size={20} className="md:hidden" />
+              Back
+            </button>
+
+            {/* RIGHT SIDE: EDIT, DELETE, AND CLOSE BUTTONS */}
+            <div className="flex items-center gap-2 md:gap-4">
+              {/* ✅ EDIT BUTTON (IMAGES ONLY) */}
+              {!localImages[currentIndex]
+                ?.split("?")[0]
+                .toLowerCase()
+                .endsWith(".mp4") && (
+                  <button
+                    className="px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition text-sm md:text-base"
+                   onClick={() => {
+  setSelectedImage({
+    url: localImages[currentIndex],
+    group: groupName,
+  });
+  navigate("/edit");
+}}
+
+                  >
+                    Edit
+                  </button>
+                )}
+
+              {/* ✅ DELETE BUTTON */}
+              <button
+                className="px-4 py-2 rounded-full bg-red-600 text-white font-bold hover:bg-red-700 transition text-sm md:text-base"
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+
+              {/* CLOSE BUTTON (DESKTOP) */}
+              <button
+                className="hidden md:flex text-white/70 hover:text-white transition"
+                onClick={() => setCurrentIndex(null)}
+              >
+                <X size={32} />
+              </button>
+            </div>
+          </div>
 
           <button
-            className="hidden z-50 md:block absolute top-6 right-6 text-white/70 hover:text-white"
-            onClick={() => setCurrentIndex(null)}
-          >
-            <X size={40} />
-          </button>
-
-          <button
-            className="hidden z-50 md:flex absolute left-4 p-4 rounded-full bg-black/10 text-white"
+            className="hidden z-50 md:flex absolute left-4 p-4 rounded-full bg-black/10 text-white hover:bg-white/10 transition"
             onClick={handlePrev}
           >
             <ChevronLeft size={48} />
           </button>
 
           <button
-            className="hidden z-50 md:flex absolute right-4 p-4 rounded-full bg-black/10 text-white"
+            className="hidden z-50 md:flex absolute right-4 p-4 rounded-full bg-black/10 text-white hover:bg-white/10 transition"
             onClick={handleNext}
           >
             <ChevronRight size={48} />
-          </button>
-
-          {/* ✅ DELETE BUTTON */}
-          <button
-            className="absolute top-6 right-20 z-50 px-4 py-2 rounded-full bg-red-600 text-white font-bold"
-            onClick={handleDelete}
-          >
-            Delete
           </button>
 
           <div className="w-full h-full flex items-center justify-center px-4">
